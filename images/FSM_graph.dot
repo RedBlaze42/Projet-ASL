@@ -1,0 +1,9 @@
+digraph traffic_lights_FSM {
+	rankdir=LR;
+	node [shape = circle];
+
+	YELLOW -> RED [ label = "yellow_alarm" ];
+	RED -> GREEN [ label = "red_alarm" ];
+	GREEN -> YELLOW [ label = "green_alarm" ];
+	GREEN -> YELLOW [ label = "pedestrian_button" ];
+}
