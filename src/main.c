@@ -67,7 +67,7 @@ int64_t set_pedestrians_warning() {
     gpio_put(CARS_GREEN_PIN, 0);
     gpio_put(PEDESTRIANS_GREEN_PIN, 0);
 
-    #ifdef 
+    #ifdef DEBUG
     printf("Switching to state %d", state);
     #endif
 
@@ -83,7 +83,7 @@ int64_t set_cars_warning() {
     gpio_put(CARS_GREEN_PIN, 0);
     gpio_put(PEDESTRIANS_GREEN_PIN, 0);
 
-    #ifdef 
+    #ifdef DEBUG
     printf("Switching to state %d", state);
     #endif
 
@@ -99,7 +99,7 @@ int64_t set_cars_pass() {
     gpio_put(CARS_YELLOW_PIN, 0);
     gpio_put(PEDESTRIANS_GREEN_PIN, 0);
 
-    #ifdef 
+    #ifdef DEBUG
     printf("Switching to state %d", state);
     #endif
 
