@@ -140,7 +140,7 @@ int main(){
         switch (state) {
             case PEDESTRIANS_PASS:
                 #ifdef DEBUG
-                printf("Current state is PEDESTRIANS_PASS\n");
+                printf("Current state is %d\n", state);
                 #endif
 
                 if(pedestrians_warning_alarm == 0) // Set PEDESTRIANS_PASS -> PEDESTRIANS_WARNING timer if not already set 
@@ -155,7 +155,7 @@ int main(){
 
             case PEDESTRIANS_WARNING:
                 #ifdef DEBUG
-                printf("Current state is PEDESTRIANS_WARNING\n");
+                printf("Current state is %d\n", state);
                 #endif
                 
                 if(cars_pass_alarm == 0) // Set PEDESTRIANS_WARNING -> CARS_PASS timer if not already set
@@ -170,7 +170,7 @@ int main(){
 
             case CARS_WARNING:
                 #ifdef DEBUG
-                printf("Current state is CARS_WARNING\n");
+                printf("Current state is %d\n", state);
                 #endif
                 
                 if(pedestrians_pass_alarm == 0) // Set CARS_WARNING -> PEDESTRIANS_PASS timer if not already set
@@ -185,10 +185,10 @@ int main(){
 
             case CARS_PASS:
                 #ifdef DEBUG
-                printf("Current state is CARS_PASS\n");
+                printf("Current state is %d\n", state);
                 #endif
                 
-                if(cars_warning_alarm == 0) // Set cars -> warning timer if not already set
+                if(cars_warning_alarm == 0) // Set CARS_PASS -> CARS_WARNING timer if not already set
                     cars_warning_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, cars_delay_ms, set_cars_warning, NULL, false);
 
                 if(cars_pass_alarm != 0){ // Reset pedestrians timer
