@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 
+#define DEBUG
+
 const uint32_t pedestrians_delay_ms = 8000;   // Time for the Pedestrians to pass (ms)
 const uint32_t warning_delay_ms = 4000;       // Amount of time the traffic light stays in both warning states (ms)
 const uint32_t cars_delay_ms = 16000;         // Time for the cars to pass (ms)
@@ -52,7 +54,7 @@ int64_t set_pedestrians_pass() {
     gpio_put(PEDESTRIANS_RED_PIN, 0);
 
     #ifdef DEBUG
-    printf("Switching to state %d", state);
+    printf("Switching to state %d\n", state);
     #endif
 
     return 0;
@@ -68,7 +70,7 @@ int64_t set_pedestrians_warning() {
     gpio_put(PEDESTRIANS_GREEN_PIN, 0);
 
     #ifdef DEBUG
-    printf("Switching to state %d", state);
+    printf("Switching to state %d\n", state);
     #endif
 
     return 0;
@@ -84,7 +86,7 @@ int64_t set_cars_warning() {
     gpio_put(PEDESTRIANS_GREEN_PIN, 0);
 
     #ifdef DEBUG
-    printf("Switching to state %d", state);
+    printf("Switching to state %d\n", state);
     #endif
 
     return 0;
@@ -100,7 +102,7 @@ int64_t set_cars_pass() {
     gpio_put(PEDESTRIANS_GREEN_PIN, 0);
 
     #ifdef DEBUG
-    printf("Switching to state %d", state);
+    printf("Switching to state %d\n", state);
     #endif
 
     return 0;
