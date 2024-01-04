@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="637pt" height="590pt" viewBox="0.00 0.00 637.44 590.28">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 586.2779)">
+<title>traffic_lights_FSM</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-586.2779 633.4366,-586.2779 633.4366,4 -4,4"/>
+<!-- CARS_PASS -->
+<g id="node1" class="node">
+<title>CARS_PASS</title>
+<ellipse fill="none" stroke="#000000" cx="295.1422" cy="-64.1613" rx="64.323" ry="64.323"/>
+<text text-anchor="middle" x="295.1422" y="-59.9613" font-family="Times,serif" font-size="14.00" fill="#000000">CARS_PASS</text>
+</g>
+<!-- CARS_WARNING -->
+<g id="node2" class="node">
+<title>CARS_WARNING</title>
+<ellipse fill="none" stroke="#000000" cx="87.7407" cy="-271.5629" rx="87.982" ry="87.982"/>
+<text text-anchor="middle" x="87.7407" y="-267.3629" font-family="Times,serif" font-size="14.00" fill="#000000">CARS_WARNING</text>
+</g>
+<!-- CARS_PASS&#45;&gt;CARS_WARNING -->
+<g id="edge1" class="edge">
+<title>CARS_PASS-&gt;CARS_WARNING</title>
+<path fill="none" stroke="#000000" d="M245.8607,-105.3975C217.9322,-131.7586 182.6854,-166.6659 152.5476,-197.6918"/>
+<polygon fill="#000000" stroke="#000000" points="149.8439,-195.4528 145.4042,-205.0726 154.8738,-200.321 149.8439,-195.4528"/>
+<text text-anchor="middle" x="143.039" y="-155.7447" font-family="Times,serif" font-size="14.00" fill="#000000">after cars_delay_ms</text>
+</g>
+<!-- CARS_PASS&#45;&gt;CARS_WARNING -->
+<g id="edge5" class="edge">
+<title>CARS_PASS-&gt;CARS_WARNING</title>
+<path fill="none" stroke="#000000" d="M253.906,-113.4428C227.5449,-141.3713 192.6376,-176.6181 161.6117,-206.7559"/>
+<polygon fill="#000000" stroke="#000000" points="158.9825,-204.4297 154.2309,-213.8993 163.8507,-209.4596 158.9825,-204.4297"/>
+<text text-anchor="middle" x="272.2967" y="-164.2993" font-family="Times,serif" font-size="14.00" fill="#000000">pedestrian button press</text>
+</g>
+<!-- PEDESTRIANS_PASS -->
+<g id="node3" class="node">
+<title>PEDESTRIANS_PASS</title>
+<ellipse fill="none" stroke="#000000" cx="295.1422" cy="-478.9644" rx="103.1272" ry="103.1272"/>
+<text text-anchor="middle" x="295.1422" y="-474.7644" font-family="Times,serif" font-size="14.00" fill="#000000">PEDESTRIANS_PASS</text>
+</g>
+<!-- CARS_WARNING&#45;&gt;PEDESTRIANS_PASS -->
+<g id="edge2" class="edge">
+<title>CARS_WARNING-&gt;PEDESTRIANS_PASS</title>
+<path fill="none" stroke="#000000" d="M149.968,-333.7902C170.3361,-354.1583 193.26,-377.0822 214.7713,-398.5935"/>
+<polygon fill="#000000" stroke="#000000" points="212.4605,-401.2325 222.0065,-405.8287 217.4103,-396.2827 212.4605,-401.2325"/>
+<text text-anchor="middle" x="114.5354" y="-370.3918" font-family="Times,serif" font-size="14.00" fill="#000000">after warning_delay_ms</text>
+</g>
+<!-- PEDESTRIANS_WARNING -->
+<g id="node4" class="node">
+<title>PEDESTRIANS_WARNING</title>
+<ellipse fill="none" stroke="#000000" cx="502.5438" cy="-271.5629" rx="126.7857" ry="126.7857"/>
+<text text-anchor="middle" x="502.5438" y="-267.3629" font-family="Times,serif" font-size="14.00" fill="#000000">PEDESTRIANS_WARNING</text>
+</g>
+<!-- PEDESTRIANS_PASS&#45;&gt;PEDESTRIANS_WARNING -->
+<g id="edge3" class="edge">
+<title>PEDESTRIANS_PASS-&gt;PEDESTRIANS_WARNING</title>
+<path fill="none" stroke="#000000" d="M368.2642,-405.8424C380.2557,-393.8509 392.8462,-381.2604 405.3117,-368.795"/>
+<polygon fill="#000000" stroke="#000000" points="408.035,-371.0214 412.6312,-361.4754 403.0852,-366.0717 408.035,-371.0214"/>
+<text text-anchor="middle" x="463.1734" y="-391.5187" font-family="Times,serif" font-size="14.00" fill="#000000">after pedestrians_delay_ms</text>
+</g>
+<!-- PEDESTRIANS_WARNING&#45;&gt;CARS_PASS -->
+<g id="edge4" class="edge">
+<title>PEDESTRIANS_WARNING-&gt;CARS_PASS</title>
+<path fill="none" stroke="#000000" d="M412.7807,-181.7998C390.5498,-159.5689 367.4486,-136.4677 347.6643,-116.6834"/>
+<polygon fill="#000000" stroke="#000000" points="350.0791,-114.1485 340.5332,-109.5522 345.1294,-119.0982 350.0791,-114.1485"/>
+<text text-anchor="middle" x="312.3883" y="-136.6416" font-family="Times,serif" font-size="14.00" fill="#000000">after warning_delay_ms</text>
+</g>
+</g>
+</svg>

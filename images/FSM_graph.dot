@@ -2,8 +2,10 @@ digraph traffic_lights_FSM {
 	rankdir=LR;
 	node [shape = circle];
 
-	YELLOW -> RED [ label = "yellow_alarm" ];
-	RED -> GREEN [ label = "red_alarm" ];
-	GREEN -> YELLOW [ label = "green_alarm" ];
-	GREEN -> YELLOW [ label = "pedestrian_button" ];
+	CARS_PASS -> CARS_WARNING [ label = "after cars_delay_ms" ];
+	CARS_WARNING -> PEDESTRIANS_PASS [ label = "after warning_delay_ms" ];
+	PEDESTRIANS_PASS -> PEDESTRIANS_WARNING [ label = "after pedestrians_delay_ms" ];
+	PEDESTRIANS_WARNING -> CARS_PASS [ label = "after warning_delay_ms" ];
+
+	CARS_PASS -> CARS_WARNING [ label = "pedestrian button press" ];
 }

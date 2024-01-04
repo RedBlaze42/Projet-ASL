@@ -2,8 +2,9 @@
  * File: traffic_light_controller.c
  * Author: Hugo Allaire
  * Description: This C file implements a simple traffic light controller state machine using the RP2040 microcontroller.
- *              By default lights are cycled between the tree states using timers.
- *              When a pedestrian presses the "boot" button on the rp2040, it will go directly to the yellow state.
+ *              By default the states lights are cycled between the four states using timers.
+ *              When the pedestrian button is pressed, the SM goes to the WARNIN_CARS state directly, to signal the cars that the pedestrian will soon pass.
+ *              The traffic light cycles are made to mimic the french system.
  */
 
 
@@ -12,37 +13,78 @@
 #include "../include/bootsel_button.h"
 #include <tusb.h>
 
-const uint32_t red_delay_ms = 8000;      // Time for the Pedestrians to pass (ms)
-const uint32_t yellow_delay_ms = 4000;   // Amount of time the traffic light stays yellow (ms)
-const uint32_t green_delay_ms = 16000;   // Maximum amount of time the traffic light can stay red (ms)
+const uint32_t pedestrians_delay_ms = 8000;   // Time for the Pedestrians to pass (ms)
+const uint32_t warning_delay_ms = 4000;       // Amount of time the traffic light stays in both warning states (ms)
+const uint32_t cars_delay_ms = 16000;         // Time for the cars to pass (ms)
 
 // Stores an hardware alarm pool
 alarm_pool_t* traffic_alarm_pool;
 
 // Remember if the timers are set
-alarm_id_t red_alarm_id, yellow_alarm_id, green_alarm_id;
+// The name of the alarm is the name of it's destination state
+alarm_id_t pedestrians_pass_alarm, pedestrians_warning_alarm, cars_warning_alarm, cars_pass_alarm;
+
+// Led pins
+const uint CARS_RED_PIN = 7;
+const uint CARS_YELLOW_PIN = 6;
+const uint CARS_GREEN_PIN = 5;
+const uint PEDESTRIANS_RED_PIN = 4;
+const uint PEDESTRIANS_GREEN_PIN = 28;
+
+// Button pin
+const uint PEDESTRIANS_BUTTON_PIN = 29;
 
 typedef enum {
-    RED,        // Pedestrians can pass
-    YELLOW,     // Waiting for the cars to pass before switching to red
-    GREEN       // Cars can pass
+    PEDESTRIANS_PASS,   // Pedestrians can pass
+    PEDESTRIANS_WARNING,// Notify the pedestrians that cars will soon pass
+    CARS_WARNING,       // Notify the cars that pedestrians will soon pass
+    CARS_PASS           // Cars can pass
 } TrafficState;
 
 // Remembers the state of the traffic lights
 volatile TrafficState state;
 
-int64_t set_yellow_callback() {
-    state = YELLOW;
+int64_t set_pedestrians_pass() {
+    state = PEDESTRIANS_PASS;
+    gpio_put(CARS_RED_PIN, 1);
+    gpio_put(PEDESTRIANS_GREEN_PIN, 1);
+
+    gpio_put(CARS_YELLOW_PIN, 0);
+    gpio_put(CARS_GREEN_PIN, 0);
+    gpio_put(PEDESTRIANS_RED_PIN, 0);
     return 0;
 }
 
-int64_t set_red_callback() {
-    state = RED;
+int64_t set_pedestrians_warning() {
+    state = PEDESTRIANS_WARNING;
+    gpio_put(CARS_RED_PIN, 1);
+    gpio_put(PEDESTRIANS_RED_PIN, 1);
+
+    gpio_put(CARS_YELLOW_PIN, 0);
+    gpio_put(CARS_GREEN_PIN, 0);
+    gpio_put(PEDESTRIANS_GREEN_PIN, 0);
     return 0;
 }
 
-int64_t set_green_callback() {
-    state = GREEN;
+int64_t set_cars_warning() {
+    state = CARS_WARNING;
+    gpio_put(CARS_YELLOW_PIN, 1);
+    gpio_put(PEDESTRIANS_RED_PIN, 1);
+
+    gpio_put(CARS_RED_PIN, 0);
+    gpio_put(CARS_GREEN_PIN, 0);
+    gpio_put(PEDESTRIANS_GREEN_PIN, 0);
+    return 0;
+}
+
+int64_t set_cars_pass() {
+    state = CARS_PASS;
+    gpio_put(PEDESTRIANS_RED_PIN, 1);
+    gpio_put(CARS_GREEN_PIN, 1);
+
+    gpio_put(CARS_RED_PIN, 0);
+    gpio_put(CARS_YELLOW_PIN, 0);
+    gpio_put(PEDESTRIANS_GREEN_PIN, 0);
     return 0;
 }
 
@@ -50,51 +92,84 @@ int main(){
 
     stdio_init_all(); // Initiate all the RP2040 GPIOs to the default state
 
-    traffic_alarm_pool = alarm_pool_create_with_unused_hardware_alarm(3); // Create a hardware timer pool with 3 timers max
+    gpio_init(CARS_RED_PIN);
+    gpio_set_dir(CARS_RED_PIN, GPIO_OUT);
+
+    gpio_init(CARS_YELLOW_PIN);
+    gpio_set_dir(CARS_YELLOW_PIN, GPIO_OUT);
+
+    gpio_init(CARS_GREEN_PIN);
+    gpio_set_dir(CARS_GREEN_PIN, GPIO_OUT);
+
+    gpio_init(PEDESTRIANS_RED_PIN);
+    gpio_set_dir(PEDESTRIANS_RED_PIN, GPIO_OUT);
+
+    gpio_init(PEDESTRIANS_GREEN_PIN);
+    gpio_set_dir(PEDESTRIANS_GREEN_PIN, GPIO_OUT);
+
+    gpio_init(PEDESTRIANS_BUTTON_PIN);
+    gpio_set_dir(PEDESTRIANS_BUTTON_PIN, GPIO_IN);
+    gpio_pull_up(PEDESTRIANS_BUTTON_PIN);
+
+
+    traffic_alarm_pool = alarm_pool_create_with_unused_hardware_alarm(4); // Create a hardware timer pool with 2 concurrent timers max
     
-    state = RED; // Start in RED state
+    set_pedestrians_pass(); // Start in pedestrians state
     
     while(true){
         switch (state) {
-            case RED:
-                printf("Current state is red\n");
+            case PEDESTRIANS_PASS:
+                printf("Current state is PEDESTRIANS_PASS\n");
 
-                if(red_alarm_id ==0) // Set red -> green timer if not already set 
-                    red_alarm_id = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, red_delay_ms, set_green_callback, NULL, false);
+                if(pedestrians_warning_alarm == 0) // Set PEDESTRIANS_PASS -> PEDESTRIANS_WARNING timer if not already set 
+                    pedestrians_warning_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, pedestrians_delay_ms, set_pedestrians_warning, NULL, false);
 
-                if(yellow_alarm_id != 0){ // Reset yellow
-                    yellow_alarm_id = 0;
-                    alarm_pool_cancel_alarm(traffic_alarm_pool, yellow_alarm_id);
+                if(pedestrians_pass_alarm != 0){ // Reset warning
+                    alarm_pool_cancel_alarm(traffic_alarm_pool, pedestrians_pass_alarm);
+                    pedestrians_pass_alarm = 0;
                 }
                 
                 break;
 
-            case YELLOW:
-                printf("Current state is yellow\n");
+            case PEDESTRIANS_WARNING:
+                printf("Current state is PEDESTRIANS_WARNING\n");
                 
-                if(yellow_alarm_id == 0) // Set yellow -> red timer if not already set
-                    yellow_alarm_id = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, yellow_delay_ms, set_red_callback, NULL, false);
+                if(cars_pass_alarm == 0) // Set PEDESTRIANS_WARNING -> CARS_PASS timer if not already set
+                    cars_pass_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, warning_delay_ms, set_cars_pass, NULL, false);
                 
-                if(green_alarm_id != 0){ // Reset green timer
-                    green_alarm_id = 0;
-                    alarm_pool_cancel_alarm(traffic_alarm_pool, green_alarm_id);
+                if(pedestrians_warning_alarm != 0){ // Reset cars timer
+                    alarm_pool_cancel_alarm(traffic_alarm_pool, pedestrians_warning_alarm);
+                    pedestrians_warning_alarm = 0;
                 }
                 
                 break;
 
-            case GREEN:
-                printf("Current state is green\n");
+            case CARS_WARNING:
+                printf("Current state is CARS_WARNING\n");
                 
-                if(green_alarm_id == 0) // Set green -> yellow timer if not already set
-                    green_alarm_id = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, green_delay_ms, set_yellow_callback, NULL, false);
+                if(pedestrians_pass_alarm == 0) // Set CARS_WARNING -> PEDESTRIANS_PASS timer if not already set
+                    pedestrians_pass_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, warning_delay_ms, set_pedestrians_pass, NULL, false);
+                
+                if(cars_warning_alarm != 0){ // Reset cars timer
+                    alarm_pool_cancel_alarm(traffic_alarm_pool, cars_warning_alarm);
+                    cars_warning_alarm = 0;
+                }
+                
+                break;
 
-                if(red_alarm_id != 0){ // Reset red timer
-                    red_alarm_id = 0;
-                    alarm_pool_cancel_alarm(traffic_alarm_pool, green_alarm_id);
+            case CARS_PASS:
+                printf("Current state is CARS_PASS\n");
+                
+                if(cars_warning_alarm == 0) // Set cars -> warning timer if not already set
+                    cars_warning_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, cars_delay_ms, set_cars_warning, NULL, false);
+
+                if(cars_pass_alarm != 0){ // Reset pedestrians timer
+                    alarm_pool_cancel_alarm(traffic_alarm_pool, cars_pass_alarm);
+                    cars_pass_alarm = 0;
                 }
 
-                if(get_bootsel_button()) // If a pedestrian presses the button
-                    state = YELLOW;
+                if(!gpio_get(PEDESTRIANS_BUTTON_PIN)) // If a pedestrian presses the button
+                    set_cars_warning();
                 
                 break;
             
