@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include "pico/stdlib.h"
-#include "../include/bootsel_button.h"
 
 const uint32_t pedestrians_delay_ms = 8000;   // Time for the Pedestrians to pass (ms)
 const uint32_t warning_delay_ms = 4000;       // Amount of time the traffic light stays in both warning states (ms)

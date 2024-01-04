@@ -19,7 +19,6 @@ pico_sdk_init()
 # Tell CMake where to find the executable source file
 add_executable(${PROJECT_NAME} 
     src/main.c
-    src/bootsel_button.c
 )
 
 # Create map/bin/hex/uf2 files
