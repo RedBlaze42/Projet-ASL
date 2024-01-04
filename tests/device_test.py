@@ -64,7 +64,7 @@ while time.time() - start_test_timestamp < test_duration:
             delay_error = transition_delay - automatic_cycle_delays[device_state]
             
             if delay_error < -delay_tolerance and device_state == TrafficState.CARS_PASS:
-                print(f"WARNING: Negative delay error of {delay_error} ms, it's normal if you have pressed the pedestrian button, otherwise it's an error.")
+                print(f"WARNING: Negative delay error of {delay_error} ms for CARS_PASS -> CARS_WARNING, it's normal if you have pressed the pedestrian button, otherwise it's an error.")
             elif abs(delay_error) > delay_tolerance:
                 raise Exception(f"Delay error of {delay_error} ms from {device_state} to {incoming_state}. Sensitivity is set at {delay_tolerance} ms")
             else:
