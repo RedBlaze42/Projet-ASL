@@ -139,9 +139,6 @@ int main(){
     while(true){
         switch (state) {
             case PEDESTRIANS_PASS:
-                #ifdef DEBUG
-                printf("Current state is %d\n", state);
-                #endif
 
                 if(pedestrians_warning_alarm == 0) // Set PEDESTRIANS_PASS -> PEDESTRIANS_WARNING timer if not already set 
                     pedestrians_warning_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, pedestrians_delay_ms, set_pedestrians_warning, NULL, false);
@@ -154,9 +151,6 @@ int main(){
                 break;
 
             case PEDESTRIANS_WARNING:
-                #ifdef DEBUG
-                printf("Current state is %d\n", state);
-                #endif
                 
                 if(cars_pass_alarm == 0) // Set PEDESTRIANS_WARNING -> CARS_PASS timer if not already set
                     cars_pass_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, warning_delay_ms, set_cars_pass, NULL, false);
@@ -169,9 +163,6 @@ int main(){
                 break;
 
             case CARS_WARNING:
-                #ifdef DEBUG
-                printf("Current state is %d\n", state);
-                #endif
                 
                 if(pedestrians_pass_alarm == 0) // Set CARS_WARNING -> PEDESTRIANS_PASS timer if not already set
                     pedestrians_pass_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, warning_delay_ms, set_pedestrians_pass, NULL, false);
@@ -184,9 +175,6 @@ int main(){
                 break;
 
             case CARS_PASS:
-                #ifdef DEBUG
-                printf("Current state is %d\n", state);
-                #endif
                 
                 if(cars_warning_alarm == 0) // Set CARS_PASS -> CARS_WARNING timer if not already set
                     cars_warning_alarm = alarm_pool_add_alarm_in_ms(traffic_alarm_pool, cars_delay_ms, set_cars_warning, NULL, false);
@@ -203,7 +191,6 @@ int main(){
             
             default: return -1;
         }
-        sleep_ms(250);
     }
     
     return 0;
