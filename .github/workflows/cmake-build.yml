@@ -32,6 +32,7 @@ jobs:
         export PICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk
         cmake $GITHUB_WORKSPACE
         make
+        find .
 
     - name: Upload artifacts
       if: success()
