@@ -38,6 +38,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: rp2040-traffic-lights-build
-        path: |
-          *.uf2
-          *.elf
+        path: *.uf2
