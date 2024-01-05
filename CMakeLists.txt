@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.12)
 # Include build functions from Pico SDK
 include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 
-# Set name of project (as PROJECT_NAME) and C/C   standards
+# Set name of project (as PROJECT_NAME) and C/C++ standards
 project(RP2040-Traffic-lights C CXX ASM)
 
 set(CMAKE_C_STANDARD 11)

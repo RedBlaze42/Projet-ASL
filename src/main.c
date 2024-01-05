@@ -14,7 +14,7 @@
 //#define DEBUG
 
 const uint32_t pedestrians_delay_ms = 8000;   // Time for the Pedestrians to pass (ms)
-const uint32_t warning_delay_ms = 4000;       // Amount of time the traffic light stays in both warning states (ms)
+const uint32_t warning_delay_ms = 4000;       // Amount of time the warning states are shown (ms)
 const uint32_t cars_delay_ms = 16000;         // Time for the cars to pass (ms)
 
 // Stores an hardware alarm pool
