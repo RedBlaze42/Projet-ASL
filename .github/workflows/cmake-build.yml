@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   build:
@@ -33,7 +34,7 @@ jobs:
 
     - name: Upload artifacts
       if: success()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: rp2040-traffic-lights-build
-        path: $GITHUB_WORKSPACE/*.uf2
+        path: RP2040-C-TrafficLights/*.uf2
