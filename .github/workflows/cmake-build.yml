@@ -1,0 +1,36 @@
+name: Build RP2040-C-TrafficLights
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
+        cd $GITHUB_WORKSPACE
+        git clone https://github.com/raspberrypi/pico-sdk.git
+
+    - name: Create build directory
+      run: mkdir build && cd build
+
+    - name: Build project
+      run: |
+        export PICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk
+        cmake ..
+
+    - name: Upload artifacts
+      if: success()
+      uses: actions/upload-artifact@v2
+      with:
+        name: rp2040-traffic-lights-build
+        path: RP2040-C-TrafficLights/build
