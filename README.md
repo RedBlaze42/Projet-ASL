@@ -147,3 +147,15 @@ Switched from TrafficState.CARS_PASS to TrafficState.CARS_WARNING after 15999 ms
 Test passed without any errors
 ```
 As you can see, I pressed the pedestrian button at the start of the test.
+
+And this is when an error occurred:
+```
+Switched from TrafficState.PEDESTRIANS_WARNING to TrafficState.CARS_PASS after 4000 ms with an error of 0 ms
+WARNING: Negative delay error of -14768 ms for CARS_PASS -> CARS_WARNING, it's normal if you have pressed the pedestrian button, otherwise it's an error.
+Switched from TrafficState.CARS_WARNING to TrafficState.PEDESTRIANS_PASS after 4000 ms with an error of 0 ms
+Switched from TrafficState.PEDESTRIANS_PASS to TrafficState.PEDESTRIANS_WARNING after 8000 ms with an error of 0 ms
+Traceback (most recent call last):
+  File "c:\Users\Hugo\OneDrive\Projet ASL\tests\device_test.py", line 61, in <module>       
+    raise Exception(f"Illegal switch from {device_state} to {incoming_state}")
+Exception: Illegal switch from TrafficState.PEDESTRIANS_WARNING to TrafficState.CARS_WARNING
+```
