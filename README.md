@@ -28,6 +28,10 @@ const uint32_t cars_delay_ms = 16000;         // Time for the cars to pass (ms)
 
 ![FSM_Diagram](https://raw.githubusercontent.com/RedBlaze42/RP2040-C-TrafficLights/main/images/FSM_diagram.svg)
 
+## Video demonstration
+
+[Here is a video showing the project in action](https://www.youtube.com/watch?v=MjUDOx1oxU8)
+
 ## Github actions
 
 Binaries are available in the github actions tab.
