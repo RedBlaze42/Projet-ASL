@@ -28,6 +28,10 @@ const uint32_t cars_delay_ms = 16000;         // Time for the cars to pass (ms)
 
 ![FSM_Diagram](https://raw.githubusercontent.com/RedBlaze42/RP2040-C-TrafficLights/main/images/FSM_diagram.svg)
 
+## Github actions
+
+Binaries are available in the github actions tab.
+
 ## Build
 
 First and foremost, clone this repository using git.
@@ -46,13 +50,21 @@ Then clone the pico sdk from inside this directory repository:
 
 `git clone https://github.com/raspberrypi/pico-sdk.git`
 
+Go inside and update the submodules to add tinyusb support:
+
+`cd pico-sdk && git submodule update --init && cd ..`
+
+You have to tell cmake where to fine the pico sdk, when still in the project root, you can run this command:
+
+```export PICO_SDK_PATH=`pwd`/pico-sdk```
+
 Create the build directory and go inside it:
 
 `mkdir build && cd build`
 
-Then you can build the project:
+Then you can configure and build the project:
 
-`export PICO_SDK_PATH=pico-sdk ; cmake ..`
+`cmake .. && make`
 
 The build files will be in your current directory (`RP2040-C-TrafficLights/build`).
 
@@ -62,6 +74,27 @@ For windows, a full tutorial on how to insall the Raspberry Pi Pico C/C++ SDK fo
 ## Programming
 
 While plugging the RP2040 to your computer, press the BOOTSEL button to program it. You can then mount the mass storage device and drop the `.uf2` file. The RP2040 should reboot and start the program.
+
+## Wiring
+
+You can edit the pin configuration by editing these lines in the main.c file
+```c
+// Led pins
+const uint CARS_RED_PIN = 7;
+const uint CARS_YELLOW_PIN = 6;
+const uint CARS_GREEN_PIN = 5;
+const uint PEDESTRIANS_RED_PIN = 4;
+const uint PEDESTRIANS_GREEN_PIN = 28;
+
+// Button pin
+const uint PEDESTRIANS_BUTTON_PIN = 29;
+```
+
+The number here are refering to the GPIO pin numbers which is different from the board pin numbers.
+
+You need to connect the other side of the pushbutton to `GND` because there is an internal pullup resistor activated on this pin.
+
+Don't forget to connect resistors in series with the LEDs to protect them.
 
 ## Debug communication
 
