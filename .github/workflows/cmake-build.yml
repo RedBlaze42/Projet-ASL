@@ -39,5 +39,7 @@ jobs:
       with:
         name: rp2040-traffic-lights-build
         path: |
+          $GITHUB_WORKSPACE/build/**/*.uf2
+          $GITHUB_WORKSPACE/build/**/*.elf
           $GITHUB_WORKSPACE/build/*.uf2
           $GITHUB_WORKSPACE/build/*.elf
