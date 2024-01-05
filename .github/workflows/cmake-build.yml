@@ -19,6 +19,9 @@ jobs:
         sudo apt-get install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib
         cd $GITHUB_WORKSPACE
         git clone https://github.com/raspberrypi/pico-sdk.git
+        cd pico-sdk
+        git submodule update --init
+        cd $GITHUB_WORKSPACE
 
     - name: Create build directory
       run: mkdir build && cd build
@@ -33,4 +36,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: rp2040-traffic-lights-build
-        path: RP2040-C-TrafficLights/build
+        path: RP2040-C-TrafficLights/RP2040-C-TrafficLights/*.uf2
