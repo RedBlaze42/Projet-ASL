@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 
 jobs:
   build:
@@ -11,7 +12,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -30,10 +31,12 @@ jobs:
       run: |
         export PICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk
         cmake $GITHUB_WORKSPACE
+        make
 
     - name: Upload artifacts
       if: success()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: rp2040-traffic-lights-build
-        path: $GITHUB_WORKSPACE/*.uf2
+        path: |
+          *.uf2
