@@ -31,6 +31,7 @@ jobs:
       run: |
         export PICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk
         cmake $GITHUB_WORKSPACE
+        make
 
     - name: Upload artifacts
       if: success()
@@ -38,5 +39,5 @@ jobs:
       with:
         name: rp2040-traffic-lights-build
         path: |
-          *.uf2
-          **/*.uf2
+          $GITHUB_WORKSPACE/build/*.uf2
+          $GITHUB_WORKSPACE/build/*.elf
