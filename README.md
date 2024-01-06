@@ -58,7 +58,7 @@ Go inside and update the submodules to add tinyusb support:
 
 `cd pico-sdk && git submodule update --init && cd ..`
 
-You have to tell cmake where to fine the pico sdk, when still in the project root, you can run this command:
+You have to tell cmake where to find the pico sdk, when still in the project root, you can run this command:
 
 ```export PICO_SDK_PATH=`pwd`/pico-sdk```
 
@@ -104,7 +104,7 @@ Don't forget to connect resistors in series with the LEDs to protect them.
 
 This code uses the CMake build system recommended by the Raspberry Pi Pico C/C++ SDK.
 
-By default, the debugging is done with the UART protocol via the usb port using the tinyusb submodule, but you can switch to the GPIO UART by changing this lines in the CMakeLists.txt file:
+By default, the debugging is done with the UART protocol via the usb port using the tinyusb submodule, but you can switch to the GPIO UART by changing these lines in the CMakeLists.txt file:
 ```Makefile
 # Enable usb output, disable uart output
 pico_enable_stdio_usb(${PROJECT_NAME} 1)
@@ -119,7 +119,7 @@ pico_enable_stdio_uart(${PROJECT_NAME} 1)
 
 ## Testbench
 
-A python testbench is available in the tests directory. It uses the USB communication to check if the state transitions are correct and made at the right time.
+A python testbench is available in the tests directory. It uses the USB/UART communication to check if the state transitions are correct and made at the right time.
 
 You need to install `Python 3` from the official [website](https://www.python.org/downloads/).
 Or using `apt`: `sudo apt install python3 python3-pip python3-venv`
