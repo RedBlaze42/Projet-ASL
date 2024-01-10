@@ -5,7 +5,7 @@ The traffic light consist of a RED, YELLOW and GREEN LEDs for the car lights and
 
 ## Functionality
 
-This state machine mirrors from the french traffic lights system.
+This state machine mirrors the french traffic lights system.
 
 There are four states which are automatically cycled by default. But there is a pedestrian button fo force the transition between CARS_PASS and CARS_WARNING states.
 
@@ -48,7 +48,7 @@ First, install all the packages required for building C for arm:
 
 `sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi libstdc++-arm-none-eabi-newlib`
 
-Then clone the pico sdk from inside this directory repository:
+Then clone the pico sdk from inside this repository directory:
 
 `cd RP2040-C-TrafficLights`
 
