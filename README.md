@@ -42,7 +42,7 @@ First and foremost, clone this repository using git.
 
 `git clone https://github.com/RedBlaze42/RP2040-C-TrafficLights.git`
 
-### Linux
+### Linux (Debian)
 
 First, install all the packages required for building C for arm:
 
